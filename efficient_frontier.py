@@ -155,6 +155,44 @@ def compute_efficient_frontier(
     return efficient, sorted_portfolios
 
 
+def plot_efficient_frontier(
+    efficient: Sequence[PortfolioPoint],
+    all_portfolios: Sequence[PortfolioPoint],
+    output_path: Path,
+) -> None:
+    """Create a scatter plot that highlights the efficient frontier."""
+
+    from matplotlib import pyplot as plt
+
+    if not efficient or not all_portfolios:
+        raise ValueError("Need portfolio data to plot the efficient frontier.")
+
+    all_risk = [point.risk for point in all_portfolios]
+    all_return = [point.expected_return for point in all_portfolios]
+    frontier_risk = [point.risk for point in efficient]
+    frontier_return = [point.expected_return for point in efficient]
+
+    plt.figure(figsize=(8, 6))
+    plt.scatter(all_risk, all_return, s=15, alpha=0.3, label="Portfolios")
+    plt.plot(
+        frontier_risk,
+        frontier_return,
+        color="tab:orange",
+        marker="o",
+        linewidth=2,
+        markersize=4,
+        label="Efficient frontier",
+    )
+    plt.title("Efficient Frontier (Daily Returns)")
+    plt.xlabel("Risk (standard deviation)")
+    plt.ylabel("Expected return")
+    plt.legend()
+    plt.grid(True, linestyle="--", linewidth=0.5, alpha=0.5)
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=150)
+    plt.close()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Compute an efficient frontier for temp.csv")
     parser.add_argument(
@@ -170,12 +208,23 @@ def main() -> None:
         default=0.01,
         help="Grid resolution for weights. Smaller values improve accuracy at the cost of runtime.",
     )
+    parser.add_argument(
+        "--plot-output",
+        type=Path,
+        default=Path("efficient_frontier.png"),
+        help="Path where the efficient frontier plot will be saved.",
+    )
+    parser.add_argument(
+        "--no-plot",
+        action="store_true",
+        help="Skip generating the efficient frontier plot.",
+    )
     args = parser.parse_args()
 
     if args.step <= 0 or args.step > 1:
         raise ValueError("Step size must be between 0 and 1.")
 
-    frontier, _ = compute_efficient_frontier(args.csv_path, step=args.step)
+    frontier, all_portfolios = compute_efficient_frontier(args.csv_path, step=args.step)
     if not frontier:
         print("No efficient portfolios were found.")
         return
@@ -185,6 +234,11 @@ def main() -> None:
     print("Return      Risk        Weights")
     for point in frontier:
         print(f"{point.expected_return:8.5f}  {point.risk:8.5f}  {point.weight_string()}")
+
+    if not args.no_plot:
+        output_path = args.plot_output
+        plot_efficient_frontier(frontier, all_portfolios, output_path)
+        print(f"Saved efficient frontier plot to {output_path}")
 
 
 if __name__ == "__main__":
