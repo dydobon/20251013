@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>20251013 포트폴리오 분석 대시보드</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" defer></script>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: linear-gradient(180deg, #eff6ff 0%, #ffffff 100%);
+        --card: #ffffffcc;
+        --text: #1f2328;
+        --muted: #6b7280;
+        --accent: #2563eb;
+        --shadow: rgba(15, 23, 42, 0.08);
+        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+          sans-serif;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+      }
+      header {
+        padding: 3.5rem 1.5rem 2.5rem;
+        text-align: center;
+      }
+      header h1 {
+        margin: 0;
+        font-size: clamp(2rem, 3vw + 1rem, 3.25rem);
+        font-weight: 700;
+      }
+      header p {
+        margin: 0.5rem auto 0;
+        max-width: 720px;
+        font-size: 1.05rem;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      main {
+        margin: 0 auto 4rem;
+        max-width: 1100px;
+        padding: 0 1.5rem;
+        display: grid;
+        gap: 1.5rem;
+      }
+      section {
+        background: var(--card);
+        backdrop-filter: blur(8px);
+        border-radius: 16px;
+        box-shadow: 0 12px 24px var(--shadow);
+        padding: 1.75rem 2rem;
+      }
+      section h2 {
+        margin-top: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+      .grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+      .grid.two-columns {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+      ul {
+        margin: 0;
+        padding-left: 1.2rem;
+        line-height: 1.7;
+      }
+      .chart-container {
+        width: 100%;
+        height: 520px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+        font-size: 0.95rem;
+      }
+      th,
+      td {
+        padding: 0.5rem 0.65rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+      }
+      th {
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.04em;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.35rem 0.65rem;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        background: rgba(37, 99, 235, 0.1);
+        color: var(--accent);
+      }
+      footer {
+        text-align: center;
+        color: var(--muted);
+        padding: 1rem 0 2rem;
+        font-size: 0.9rem;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+          --card: rgba(15, 23, 42, 0.82);
+          --text: #e5e7eb;
+          --muted: #94a3b8;
+          --shadow: rgba(0, 0, 0, 0.35);
+        }
+        th,
+        td {
+          border-bottom-color: rgba(148, 163, 184, 0.25);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <span class="badge">2025.10.13 프로젝트 스냅샷</span>
+      <h1>삼성전자·애플·엔비디아 데이터 기반 포트폴리오 분석</h1>
+      <p>
+        `temp.csv` 데이터셋을 정규화하는 분석 스크립트와 효율적 투자선 계산기를 토대로, 세 종목의
+        일별 종가 수익률을 활용한 핵심 인사이트를 요약했습니다. 아래 대시보드는 프로젝트에서 구현한
+        주요 기능과 효율적 투자선 결과를 한눈에 제공합니다.
+      </p>
+    </header>
+    <main>
+      <section class="grid two-columns">
+        <div>
+          <h2>핵심 산출물</h2>
+          <ul>
+            <li><strong>analyze_temp_csv.py</strong>: 두 줄 헤더 CSV를 파싱하고 요약 통계를 계산하는 의존성 없는 CLI.</li>
+            <li><strong>efficient_frontier.py</strong>: 동일한 파싱 로직을 활용해 일별 종가 수익률 기반 효율적 투자선을 계산.</li>
+            <li>두 스크립트 모두 외부 패키지 없이 실행 가능하며, 필요 시 Plotly 기반 웹 대시보드로 확장 가능.</li>
+          </ul>
+        </div>
+        <div>
+          <h2>데이터 요약</h2>
+          <ul>
+            <li>기간: 2023-10-16 ~ 2025-10-10 (516 거래일)</li>
+            <li>포함 종목: 삼성전자(005930.KS), 애플(AAPL), 엔비디아(NVDA)</li>
+            <li>주요 통계: NVDA가 가장 높은 변동성(최대 +18.72%, 최소 -16.97%)을 기록</li>
+            <li>수익률 상관계수: 삼성전자-애플 0.11, 애플-엔비디아 0.37, 삼성전자-엔비디아 0.09</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2>효율적 투자선 시각화</h2>
+        <div id="frontier-chart" class="chart-container"></div>
+        <p style="color: var(--muted); font-size: 0.9rem;">
+          산점도는 모든 장기 비중 조합(격자 해상도 0.02)을 회색 점으로 표시하며, 그중 위험 대비 기대수익이 지배적인 조합을 주황색
+          선으로 강조했습니다. 포인트를 클릭하면 해당 포트폴리오의 종목 비중을 확인할 수 있습니다.
+        </p>
+      </section>
+
+      <section>
+        <h2>대표 효율 포트폴리오</h2>
+        <p>
+          아래 표는 효율적 투자선에서 위험 수준이 낮은 순으로 상위 여섯 개 포트폴리오를 보여줍니다. 수익률은 일별 기대 수익,
+          위험은 일별 수익률 표준편차입니다.
+        </p>
+        <table id="frontier-table">
+          <thead>
+            <tr>
+              <th scope="col">기대수익</th>
+              <th scope="col">위험</th>
+              <th scope="col">포트폴리오 가중치</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+    <footer>© 2025 20251013 프로젝트 팀</footer>
+
+    <script>
+      async function loadFrontier() {
+        const response = await fetch('frontier_data.json');
+        if (!response.ok) {
+          throw new Error('frontier_data.json 파일을 불러오지 못했습니다.');
+        }
+        return response.json();
+      }
+
+      function formatPercent(value) {
+        return (value * 100).toFixed(2) + '%';
+      }
+
+      function formatWeights(weights) {
+        return Object.entries(weights)
+          .map(([ticker, weight]) => `${ticker} ${(weight * 100).toFixed(0)}%`)
+          .join(', ');
+      }
+
+      function buildTable(frontier) {
+        const tbody = document.querySelector('#frontier-table tbody');
+        tbody.innerHTML = '';
+        frontier.slice(0, 6).forEach((point) => {
+          const weights = formatWeights(point.weights);
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${formatPercent(point.expected_return)}</td>
+            <td>${formatPercent(point.risk)}</td>
+            <td>${weights}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+
+      function renderChart(data) {
+        const allTrace = {
+          x: data.all.map((point) => point.risk),
+          y: data.all.map((point) => point.expected_return),
+          mode: 'markers',
+          type: 'scatter',
+          name: '전체 조합',
+          marker: { size: 6, color: 'rgba(148, 163, 184, 0.45)' },
+          hovertemplate: '위험: %{x:.3%}<br>기대수익: %{y:.3%}<extra></extra>',
+        };
+        const frontierTrace = {
+          x: data.frontier.map((point) => point.risk),
+          y: data.frontier.map((point) => point.expected_return),
+          mode: 'lines+markers',
+          type: 'scatter',
+          name: '효율적 투자선',
+          marker: { size: 8, color: '#f97316' },
+          line: { width: 3, color: '#f97316' },
+          hovertemplate:
+            '위험: %{x:.3%}<br>기대수익: %{y:.3%}<br><br>%{customdata}<extra></extra>',
+          customdata: data.frontier.map((point) =>
+            formatWeights(point.weights).replace(/, /g, '<br>')
+          ),
+        };
+        const layout = {
+          margin: { l: 60, r: 30, t: 30, b: 60 },
+          xaxis: { title: '위험 (표준편차)', tickformat: '.1%', zeroline: false },
+          yaxis: { title: '기대수익', tickformat: '.2%', zeroline: false },
+          legend: { orientation: 'h', x: 0, y: 1.12 },
+          hovermode: 'closest',
+          plot_bgcolor: 'rgba(255,255,255,0.0)',
+          paper_bgcolor: 'rgba(255,255,255,0.0)',
+        };
+        Plotly.newPlot('frontier-chart', [allTrace, frontierTrace], layout, {
+          responsive: true,
+          displaylogo: false,
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          const data = await loadFrontier();
+          buildTable(data.frontier);
+          renderChart(data);
+        } catch (error) {
+          console.error(error);
+          const container = document.getElementById('frontier-chart');
+          container.innerHTML = '<p>효율적 투자선 데이터를 불러오지 못했습니다.</p>';
+        }
+      });
+    </script>
+  </body>
+</html>
