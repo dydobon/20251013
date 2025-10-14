@@ -12,7 +12,19 @@ python analyze_temp_csv.py 다른파일.csv          # 다른 파일을 분석�
 python efficient_frontier.py                  # temp.csv 기반 효율적 투자선 계산 + 그래프 저장
 python efficient_frontier.py --no-plot        # 표 출력만 원할 때 (matplotlib 미설치 환경)
 python efficient_frontier.py --plot-output my_frontier.png --step 0.02
+python serve.py                               # docs/index.html을 8000번 포트에서 제공
+python serve.py --port 8080                   # 다른 포트로 제공하고 싶을 때
 ```
+
+## 웹 서버로 index.html 확인하기
+
+`docs/index.html`을 간단히 웹 브라우저에서 확인하려면 다음 명령으로 내장 HTTP 서버를 실행하세요.
+
+```bash
+python serve.py --host 0.0.0.0 --port 8000
+```
+
+서버가 실행되면 `http://localhost:8000/` 또는 환경에 따라 포워딩된 주소에서 페이지를 열 수 있습니다. 서버를 종료하려면 실행 중인 터미널에서 <kbd>Ctrl</kbd>+<kbd>C</kbd>를 누르세요.
 
 스크립트는 다음과 같은 정보를 제공합니다.
 
