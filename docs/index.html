@@ -70,6 +70,23 @@
       .grid.two-columns {
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       }
+      .capm-section {
+        display: grid;
+        gap: 1.75rem;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        align-items: center;
+      }
+      .capm-diagram {
+        width: 100%;
+        max-width: 520px;
+        margin: 0 auto;
+        display: block;
+      }
+      .capm-caption {
+        color: var(--muted);
+        font-size: 0.92rem;
+        line-height: 1.6;
+      }
       ul {
         margin: 0;
         padding-left: 1.2rem;
@@ -158,6 +175,66 @@
             <li>주요 통계: NVDA가 가장 높은 변동성(최대 +18.72%, 최소 -16.97%)을 기록</li>
             <li>수익률 상관계수: 삼성전자-애플 0.11, 애플-엔비디아 0.37, 삼성전자-엔비디아 0.09</li>
           </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2>CAPM (자본자산가격결정모형) 이해하기</h2>
+        <div class="capm-section">
+          <div>
+            <p>
+              CAPM은 시장 전체의 위험과 개별 자산의 체계적 위험(베타)을 연결해 자본 비용을 추정하는 고전적인 모형입니다.
+              위험이 없는 이자율(<em>Risk-free</em>)과 시장 위험 프리미엄(<em>Market Risk Premium</em>)에 자산의 베타를 곱해 기대수익을 계산함으로써,
+              효율적 투자선에서 선택한 포트폴리오가 시장 대비 적절한 보상을 제공하는지를 평가할 수 있습니다.
+            </p>
+            <ul>
+              <li>기대수익 = Risk-free + β × (시장 기대수익 − Risk-free)</li>
+              <li>β &gt; 1: 시장보다 민감한 공격적 자산, β &lt; 1: 방어적 자산</li>
+              <li>기울기(시장 위험 프리미엄)는 위험 대비 요구되는 추가 수익을 의미</li>
+            </ul>
+          </div>
+          <figure>
+            <svg
+              class="capm-diagram"
+              viewBox="0 0 640 360"
+              role="img"
+              aria-labelledby="capm-title capm-desc"
+            >
+              <title id="capm-title">CAPM SML Diagram</title>
+              <desc id="capm-desc">
+                기대수익 축과 베타 축으로 구성된 좌표에 위험이 없는 수익률과 시장 포트폴리오를 잇는 증권시장선이 표시되어 있습니다.
+              </desc>
+              <defs>
+                <linearGradient id="smlGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#60a5fa" />
+                  <stop offset="100%" stop-color="#f97316" />
+                </linearGradient>
+              </defs>
+              <rect x="0" y="0" width="640" height="360" rx="18" fill="rgba(37, 99, 235, 0.05)" />
+              <g transform="translate(70 300)">
+                <line x1="0" y1="0" x2="0" y2="-240" stroke="#1f2937" stroke-width="2" />
+                <line x1="0" y1="0" x2="520" y2="0" stroke="#1f2937" stroke-width="2" />
+                <text x="-48" y="-200" fill="#1f2937" font-size="16" font-weight="600" transform="rotate(-90 -48 -200)">
+                  기대수익 (E[R])
+                </text>
+                <text x="250" y="40" fill="#1f2937" font-size="16" font-weight="600">β (체계적 위험)</text>
+                <line x1="0" y1="-40" x2="520" y2="-200" stroke="url(#smlGradient)" stroke-width="4" />
+                <circle cx="0" cy="-40" r="6" fill="#2563eb" />
+                <text x="-10" y="-55" fill="#2563eb" font-size="14" font-weight="600">Risk-free</text>
+                <circle cx="360" cy="-160" r="7" fill="#f97316" />
+                <text x="340" y="-180" fill="#f97316" font-size="14" font-weight="600">시장 포트폴리오</text>
+                <line x1="360" y1="-160" x2="360" y2="0" stroke="#94a3b8" stroke-dasharray="6 6" />
+                <text x="350" y="20" fill="#64748b" font-size="13">β = 1</text>
+                <line x1="200" y1="-120" x2="200" y2="0" stroke="#d1d5db" stroke-dasharray="4 6" />
+                <circle cx="200" cy="-120" r="6" fill="#10b981" />
+                <text x="170" y="-135" fill="#0f766e" font-size="13" font-weight="600">개별 자산 A</text>
+                <text x="180" y="20" fill="#64748b" font-size="13">β = 0.6</text>
+              </g>
+            </svg>
+            <figcaption class="capm-caption">
+              증권시장선(SML)은 위험이 없는 수익률에서 시작해 시장 포트폴리오까지 이어집니다. 자산의 베타가 커질수록 요구되는 기대수익이 기울기에 비례해 증가합니다.
+            </figcaption>
+          </figure>
         </div>
       </section>
 
